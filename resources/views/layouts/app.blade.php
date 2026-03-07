@@ -34,6 +34,15 @@
             </a>
             <span class="text-gray-500">Ежедневно 11:00–23:00</span>
         </div>
+        @php($cartCount = array_sum(session('cart', [])))
+
+        <a href="{{ route('cart.index') }}" class="ml-3 text-sm hover:text-rose-600">
+            🛒 Корзина
+            <span id="cartCount"
+                  class="ml-1 inline-flex items-center justify-center min-w-6 h-6 px-2 rounded-full bg-rose-500 text-white text-xs {{ $cartCount ? '' : 'hidden' }}">
+        {{ $cartCount }}
+    </span>
+        </a>
 
     </div>
 

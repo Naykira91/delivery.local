@@ -31,9 +31,12 @@
                 @endif
             </div>
 
-            <button type="button" class="border rounded-xl px-4 py-3 hover:bg-gray-50">
-                В корзину
-            </button>
+            <form action="{{ route('cart.add', $product) }}" method="POST">
+                @csrf
+                <button type="submit" class="border rounded-xl px-4 py-3 hover:bg-gray-50">
+                    В корзину
+                </button>
+            </form>
 
             @if($product->description)
                 <div class="mt-2">

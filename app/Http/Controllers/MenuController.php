@@ -9,7 +9,7 @@ class MenuController extends Controller
 {
     public function index(Request $request)
     {
-        $q = trim((string)$request->get('q', ''));
+        $q = trim((string) $request->get('q', ''));
 
         $categories = Category::query()
             ->where('is_active', true)
@@ -23,6 +23,9 @@ class MenuController extends Controller
             }])
             ->get();
 
-        return view('menu.index', compact('categories', 'q'));
+        //  корзина из сессии (product_id => qty)
+        $cart = session('cart', []);
+
+        return view('menu.index', compact('categories', 'q', 'cart'));
     }
 }

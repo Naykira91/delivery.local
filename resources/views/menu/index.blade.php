@@ -25,7 +25,7 @@
 
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         @foreach($cat->products as $product)
-                            @include('partials.product-card', ['product' => $product])
+                            @include('partials.product-card', ['product' => $product, 'cart' => $cart])
                         @endforeach
                     </div>
                 </section>
