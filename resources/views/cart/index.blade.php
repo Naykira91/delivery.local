@@ -92,9 +92,10 @@
                         Очистить корзину
                     </button>
                 </form>
-                <button class="mt-4 w-full bg-rose-500 text-white rounded-xl px-4 py-3 hover:bg-rose-600">
+                <a href="{{ route('checkout.create') }}"
+                   class="mt-4 w-full inline-flex items-center justify-center bg-rose-500 text-white rounded-xl px-4 py-3 hover:bg-rose-600 transition">
                     Перейти к оформлению
-                </button>
+                </a>
 
                 <div class="mt-3 text-xs text-gray-500">
                     Оформление заказа сделаем на следующем шаге.

@@ -74,5 +74,6 @@
         <div class="text-xs text-gray-400">*если используете</div>
     </div>
 </footer>
+@stack('scripts')
 </body>
 </html>
