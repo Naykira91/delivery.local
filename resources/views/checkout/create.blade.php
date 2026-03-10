@@ -84,31 +84,94 @@
                     <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
                     @enderror
 
-                    <div id="addressBlock">
-                        <label class="block text-sm font-medium mb-1">Адрес</label>
-                        <input type="text"
-                               name="address"
-                               value="{{ old('address') }}"
-                               class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
-                               placeholder="Улица, дом, квартира">
-                        @error('address')
-                        <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    <div id="addressFields">
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium mb-1">Улица и дом</label>
+                            <input type="text"
+                                   name="address"
+                                   value="{{ old('address') }}"
+                                   class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                                   placeholder="Улица и номер дома">
+                            @error('address')
+                            <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div id="deliveryInfo" class="mt-3 bg-sky-50 border border-sky-100 rounded-2xl p-4 text-sm text-gray-700">
-                        <div class="font-medium mb-2">Доставка бесплатная при следующих условиях:</div>
-                        <div class="space-y-1">
-                            <div>Пригородный, Крона — от 1000 ₽</div>
-                            <div>Жил городок, Нежинка, Нежинка 3, Золотой квартал, 23 микрорайон, Ростоши — от 1500 ₽</div>
-                            <div>Мира, Мёртвый город — от 2000 ₽</div>
-                            <div>Центр города, Степной, Ивановка, Экодолье, Приуралье — от 2500 ₽</div>
-                            <div>Весенний, Южный, Карачи, Маяк — от 3000 ₽</div>
-                            <div>Армада, Каменноозёрное — от 3500 ₽</div>
-                            <div>Приуральский, Яровой, Беленовка — от 4000 ₽</div>
-                            <div>Чулошников — от 5000 ₽</div>
-                            <div>Чебеньки, Студенцы, Вязовка — от 6000 ₽</div>
-                            <div>Пречистинка, Островное — от 6500 ₽</div>
+                        <div class="mb-3">
+                            <label class="inline-flex items-center gap-2">
+                                <input type="checkbox"
+                                       name="is_private_house"
+                                       value="1"
+                                       id="privateHouseCheckbox"
+                                    {{ old('is_private_house') ? 'checked' : '' }}>
+                                <span>Частный дом</span>
+                            </label>
+                        </div>
+
+                        <div id="flatFields" class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Квартира</label>
+                                <input type="text"
+                                       name="apartment"
+                                       value="{{ old('apartment') }}"
+                                       class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                                       placeholder="Квартира">
+                                @error('apartment')
+                                <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Подъезд</label>
+                                <input type="text"
+                                       name="entrance"
+                                       value="{{ old('entrance') }}"
+                                       class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                                       placeholder="Подъезд">
+                                @error('entrance')
+                                <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Этаж</label>
+                                <input type="text"
+                                       name="floor"
+                                       value="{{ old('floor') }}"
+                                       class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                                       placeholder="Этаж">
+                                @error('floor')
+                                <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Домофон</label>
+                                <input type="text"
+                                       name="intercom"
+                                       value="{{ old('intercom') }}"
+                                       class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                                       placeholder="Домофон">
+                                @error('intercom')
+                                <div class="text-sm text-red-500 mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div id="deliveryInfo" class="mt-3 bg-sky-50 border border-sky-200 rounded-2xl p-4 text-sm text-gray-700">
+                            <div class="font-medium mb-2">Доставка бесплатная:</div>
+                            <div class="space-y-1">
+                                <div>Пригородный, Крона — от 1000 ₽</div>
+                                <div>Жил городок, Нежинка, Нежинка 3, Золотой квартал, 23 микрорайон, Ростоши — от 1500 ₽</div>
+                                <div>Мира, Мёртвый город — от 2000 ₽</div>
+                                <div>Центр города, Степной, Ивановка, Экодолье, Приуралье — от 2500 ₽</div>
+                                <div>Весенний, Южный, Карачи, Маяк — от 3000 ₽</div>
+                                <div>Армада, Каменноозёрное — от 3500 ₽</div>
+                                <div>Приуральский, Яровой, Беленовка — от 4000 ₽</div>
+                                <div>Чулошников — от 5000 ₽</div>
+                                <div>Чебеньки, Студенцы, Вязовка — от 6000 ₽</div>
+                                <div>Пречистинка, Островное — от 6500 ₽</div>
+                            </div>
                         </div>
                     </div>
 
@@ -162,30 +225,44 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const radios = document.querySelectorAll('.js-delivery-type');
-            const addressBlock = document.getElementById('addressBlock');
-            const deliveryInfo = document.getElementById('deliveryInfo');
+            const deliveryRadios = document.querySelectorAll('.js-delivery-type');
+            const addressFields = document.getElementById('addressFields');
             const pickupInfo = document.getElementById('pickupInfo');
+            const privateHouseCheckbox = document.getElementById('privateHouseCheckbox');
+            const flatFields = document.getElementById('flatFields');
 
-            function toggleDeliveryFields() {
+            function toggleDeliveryType() {
                 const selected = document.querySelector('.js-delivery-type:checked')?.value;
 
                 if (selected === 'pickup') {
-                    addressBlock.classList.add('hidden');
-                    deliveryInfo.classList.add('hidden');
+                    addressFields.classList.add('hidden');
                     pickupInfo.classList.remove('hidden');
                 } else {
-                    addressBlock.classList.remove('hidden');
-                    deliveryInfo.classList.remove('hidden');
+                    addressFields.classList.remove('hidden');
                     pickupInfo.classList.add('hidden');
                 }
             }
 
-            radios.forEach((radio) => {
-                radio.addEventListener('change', toggleDeliveryFields);
+            function togglePrivateHouse() {
+                if (!privateHouseCheckbox) return;
+
+                if (privateHouseCheckbox.checked) {
+                    flatFields.classList.add('hidden');
+                } else {
+                    flatFields.classList.remove('hidden');
+                }
+            }
+
+            deliveryRadios.forEach((radio) => {
+                radio.addEventListener('change', toggleDeliveryType);
             });
 
-            toggleDeliveryFields();
+            if (privateHouseCheckbox) {
+                privateHouseCheckbox.addEventListener('change', togglePrivateHouse);
+            }
+
+            toggleDeliveryType();
+            togglePrivateHouse();
         });
     </script>
 @endpush

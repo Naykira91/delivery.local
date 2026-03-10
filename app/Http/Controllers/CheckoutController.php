@@ -69,12 +69,19 @@ class CheckoutController extends Controller
             'delivery_type'   => ['required', 'in:delivery,pickup'],
             'payment_method'  => ['required', 'in:cash,transfer'],
             'address'         => ['nullable', 'string', 'max:500'],
+            'apartment'       => ['nullable', 'string', 'max:50'],
+            'entrance'        => ['nullable', 'string', 'max:50'],
+            'floor'           => ['nullable', 'string', 'max:50'],
+            'intercom'        => ['nullable', 'string', 'max:100'],
+            'is_private_house'=> ['nullable', 'boolean'],
             'comment'         => ['nullable', 'string', 'max:1000'],
         ]);
 
+        $isPrivateHouse = (bool) $request->boolean('is_private_house');
+
         if ($validated['delivery_type'] === 'delivery' && empty($validated['address'])) {
             return back()
-                ->withErrors(['address' => 'Укажите адрес доставки'])
+                ->withErrors(['address' => 'Укажите улицу и дом'])
                 ->withInput();
         }
 
@@ -112,16 +119,38 @@ class CheckoutController extends Controller
         }
 
         $order = Order::create([
-            'customer_name'  => $validated['customer_name'],
-            'customer_phone' => $validated['customer_phone'],
-            'delivery_type'  => $validated['delivery_type'],
-            'payment_method' => $validated['payment_method'],
-            'address'        => $validated['delivery_type'] === 'delivery'
+            'customer_name'   => $validated['customer_name'],
+            'customer_phone'  => $validated['customer_phone'],
+            'delivery_type'   => $validated['delivery_type'],
+            'payment_method'  => $validated['payment_method'],
+
+            'address'         => $validated['delivery_type'] === 'delivery'
                 ? ($validated['address'] ?? null)
                 : null,
-            'comment'        => $validated['comment'] ?? null,
-            'total_price'    => $total,
-            'status'         => 'new',
+
+            'apartment'       => $validated['delivery_type'] === 'delivery' && !$isPrivateHouse
+                ? ($validated['apartment'] ?? null)
+                : null,
+
+            'entrance'        => $validated['delivery_type'] === 'delivery' && !$isPrivateHouse
+                ? ($validated['entrance'] ?? null)
+                : null,
+
+            'floor'           => $validated['delivery_type'] === 'delivery' && !$isPrivateHouse
+                ? ($validated['floor'] ?? null)
+                : null,
+
+            'intercom'        => $validated['delivery_type'] === 'delivery' && !$isPrivateHouse
+                ? ($validated['intercom'] ?? null)
+                : null,
+
+            'is_private_house'=> $validated['delivery_type'] === 'delivery'
+                ? $isPrivateHouse
+                : false,
+
+            'comment'         => $validated['comment'] ?? null,
+            'total_price'     => $total,
+            'status'          => 'new',
         ]);
 
         foreach ($items as $item) {

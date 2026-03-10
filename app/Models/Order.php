@@ -12,9 +12,18 @@ class Order extends Model
         'delivery_type',
         'payment_method',
         'address',
+        'apartment',
+        'entrance',
+        'floor',
+        'intercom',
+        'is_private_house',
         'comment',
         'total_price',
         'status',
+    ];
+
+    protected $casts = [
+        'is_private_house' => 'boolean',
     ];
 
     public function items()
