@@ -29,12 +29,16 @@ function updateCardQty(productId, qty) {
 
 async function postFormAjax(form) {
     const url = form.action;
-    const token = form.querySelector('input[name="_token"]')?.value;
+    const token =
+        form.querySelector('input[name="_token"]')?.value ||
+        document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
     const res = await fetch(url, {
         method: 'POST',
+        credentials: 'same-origin',
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': token,
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         },
@@ -47,7 +51,6 @@ async function postFormAjax(form) {
 
     return await res.json();
 }
-
 document.addEventListener('submit', async (e) => {
     const form = e.target;
 
@@ -72,7 +75,6 @@ document.addEventListener('submit', async (e) => {
             updateCardQty(data.product_id, qty);
         }
     } catch (err) {
-        console.error(err);
-        form.submit();
+        console.error('Cart AJAX error:', err);
     }
 });

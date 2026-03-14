@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Доставка еды')</title>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
@@ -48,6 +49,7 @@
 
     <!-- Нижняя строка навигации -->
     <div class="container mx-auto px-4 pb-3 flex gap-6 text-sm text-gray-600">
+        <a href="{{ route('menu') }}" class="hover:text-rose-500 transition">Меню</a>
         <a href="{{ route('delivery') }}" class="hover:text-rose-500 transition">Доставка и оплата</a>
         <a href="{{ route('contacts') }}" class="hover:text-rose-500 transition">Контакты</a>
     </div>
@@ -55,10 +57,22 @@
 
 <main class="bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 py-6">
+
+        @if (session('success'))
+            <div class="mb-4 rounded-2xl border border-green-200 bg-green-50 px-4 py-3 text-green-800">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="mb-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-red-800">
+                {{ session('error') }}
+            </div>
+        @endif
+
         @yield('content')
     </div>
 </main>
-
 <footer class="border-t bg-white">
     <div class="container mx-auto px-4 py-6 text-sm text-gray-600 flex flex-col gap-2">
         <div class="flex flex-wrap gap-4">

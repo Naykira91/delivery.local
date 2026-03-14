@@ -59,7 +59,7 @@ class CartController extends Controller
 
         $this->saveCart($cart);
 
-        if ($request->expectsJson()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'ok' => true,
                 'product_id' => $product->id,
@@ -83,7 +83,7 @@ class CartController extends Controller
 
         $this->saveCart($cart);
 
-        if ($request->expectsJson()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'ok' => true,
                 'product_id' => $product->id,
@@ -111,7 +111,7 @@ class CartController extends Controller
 
         $qty = (int) ($cart[$product->id] ?? 0);
 
-        if ($request->expectsJson()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'ok' => true,
                 'product_id' => $product->id,
@@ -131,7 +131,7 @@ class CartController extends Controller
 
         $this->saveCart($cart);
 
-        if ($request->expectsJson()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'ok' => true,
                 'product_id' => $product->id,
@@ -147,7 +147,7 @@ class CartController extends Controller
     {
         session()->forget('cart');
 
-        if ($request->expectsJson()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'ok' => true,
                 'count' => 0,

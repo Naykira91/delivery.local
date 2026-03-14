@@ -11,7 +11,10 @@
         <div class="lg:col-span-2">
             <form action="{{ route('checkout.store') }}" method="POST" class="bg-white border border-gray-100 rounded-2xl p-5 space-y-4">
                 @csrf
-
+                <div class="hidden">
+                    <label for="website">Website</label>
+                    <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+                </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Имя</label>
                     <input type="text"

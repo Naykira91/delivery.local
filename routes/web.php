@@ -7,7 +7,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 
 Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
-Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::post('/checkout', [CheckoutController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('checkout.store');
 
 Route::get('/', [MenuController::class, 'index'])->name('home'); // главная = меню
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');

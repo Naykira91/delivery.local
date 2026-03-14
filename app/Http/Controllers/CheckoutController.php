@@ -56,6 +56,10 @@ class CheckoutController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->filled('website')) {
+            abort(422);
+        }
+
         $cart = session('cart', []);
 
         if (empty($cart)) {
@@ -168,6 +172,6 @@ class CheckoutController extends Controller
         session()->forget('cart');
 
         return redirect()->route('home')
-            ->with('success', 'Заказ успешно оформлен');
+            ->with('success', 'Спасибо! Заказ успешно оформлен. Мы скоро свяжемся с вами.');
     }
 }
