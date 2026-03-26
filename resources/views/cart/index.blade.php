@@ -93,7 +93,7 @@
                     </button>
                 </form>
                 <a href="{{ route('checkout.create') }}"
-                   class="mt-4 w-full inline-flex items-center justify-center bg-rose-500 text-white rounded-xl px-4 py-3 hover:bg-rose-600 transition">
+                   class="mt-4 w-full inline-flex items-center justify-center bg-orange-500 text-white rounded-xl px-4 py-3 hover:bg-orange-600 transition">
                     Перейти к оформлению
                 </a>
 

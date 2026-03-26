@@ -5,7 +5,7 @@
     $qty = (int)(($cart[$product->id] ?? 0));
 @endphp
 
-<div class="h-full border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md hover:border-rose-200 transition flex flex-col">
+<div class="h-full border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md hover:border-orange-200 transition flex flex-col">
 
     {{-- Фото --}}
     <a href="{{ route('product.show', $product->slug) }}" class="block">
@@ -63,9 +63,9 @@
                 @csrf
 
                 <button type="submit"
-                        class="w-full bg-rose-500 text-white rounded-xl px-3 py-2 text-sm font-medium
-                           transition hover:bg-rose-600 active:scale-[0.97]
-                           focus:outline-none focus:ring-2 focus:ring-rose-300">
+                        class="w-full bg-orange-500 text-white rounded-xl px-3 py-2 text-sm font-medium
+                               transition hover:bg-orange-600 active:scale-[0.97]
+                               focus:outline-none focus:ring-2 focus:ring-orange-300">
                     В корзину
                 </button>
             </form>
@@ -81,8 +81,8 @@
 
                     <button type="submit"
                             class="w-full h-10 border border-gray-200 rounded-xl
-                               text-lg font-medium text-gray-600
-                               transition hover:bg-gray-100 active:scale-[0.95]">
+                                   text-lg font-medium text-gray-600
+                                   transition hover:bg-gray-100 active:scale-[0.95]">
                         −
                     </button>
                 </form>
@@ -98,8 +98,8 @@
 
                     <button type="submit"
                             class="w-full h-10 rounded-xl
-                               bg-rose-500 text-white text-lg font-medium
-                               transition hover:bg-rose-600 active:scale-[0.95]">
+                                   bg-orange-500 text-white text-lg font-medium
+                                   transition hover:bg-orange-600 active:scale-[0.95]">
                         +
                     </button>
                 </form>

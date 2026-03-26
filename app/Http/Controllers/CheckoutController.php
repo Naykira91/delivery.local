@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreOrderRequest;
+use App\Services\Checkout\CheckoutOrderService;
 
 class CheckoutController extends Controller
 {
@@ -13,165 +12,50 @@ class CheckoutController extends Controller
         $cart = session('cart', []);
 
         if (empty($cart)) {
-            return redirect()->route('cart.index')
+            return redirect()
+                ->route('cart.index')
                 ->with('error', 'Корзина пуста');
         }
 
-        $ids = array_keys($cart);
+        $checkout = app(CheckoutOrderService::class)->prepareCart($cart);
 
-        $products = Product::query()
-            ->whereIn('id', $ids)
-            ->where('is_active', true)
-            ->with('mainImage')
-            ->get()
-            ->keyBy('id');
-
-        $items = [];
-        $total = 0;
-
-        foreach ($cart as $id => $qty) {
-            $product = $products->get((int) $id);
-
-            if (!$product) {
-                continue;
-            }
-
-            $lineTotal = $product->price * $qty;
-            $total += $lineTotal;
-
-            $items[] = [
-                'product' => $product,
-                'qty' => $qty,
-                'line_total' => $lineTotal,
-            ];
-        }
-
-        if (empty($items)) {
-            return redirect()->route('cart.index')
+        if ($checkout->items === []) {
+            return redirect()
+                ->route('cart.index')
                 ->with('error', 'Корзина пуста');
         }
 
-        return view('checkout.create', compact('items', 'total'));
+        return view('checkout.create', [
+            'items' => $checkout->items,
+            'total' => $checkout->total,
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        if ($request->filled('website')) {
-            abort(422);
-        }
-
         $cart = session('cart', []);
 
         if (empty($cart)) {
-            return redirect()->route('cart.index')
+            return redirect()
+                ->route('cart.index')
                 ->with('error', 'Корзина пуста');
         }
 
-        $validated = $request->validate([
-            'customer_name'   => ['required', 'string', 'max:255'],
-            'customer_phone'  => ['required', 'string', 'max:30'],
-            'delivery_type'   => ['required', 'in:delivery,pickup'],
-            'payment_method'  => ['required', 'in:cash,transfer'],
-            'address'         => ['nullable', 'string', 'max:500'],
-            'apartment'       => ['nullable', 'string', 'max:50'],
-            'entrance'        => ['nullable', 'string', 'max:50'],
-            'floor'           => ['nullable', 'string', 'max:50'],
-            'intercom'        => ['nullable', 'string', 'max:100'],
-            'is_private_house'=> ['nullable', 'boolean'],
-            'comment'         => ['nullable', 'string', 'max:1000'],
-        ]);
+        $result = app(CheckoutOrderService::class)->create(
+            data: $request->validatedForOrder(),
+            cart: $cart
+        );
 
-        $isPrivateHouse = (bool) $request->boolean('is_private_house');
-
-        if ($validated['delivery_type'] === 'delivery' && empty($validated['address'])) {
-            return back()
-                ->withErrors(['address' => 'Укажите улицу и дом'])
-                ->withInput();
-        }
-
-        $ids = array_keys($cart);
-
-        $products = Product::query()
-            ->whereIn('id', $ids)
-            ->where('is_active', true)
-            ->get()
-            ->keyBy('id');
-
-        $items = [];
-        $total = 0;
-
-        foreach ($cart as $id => $qty) {
-            $product = $products->get((int) $id);
-
-            if (!$product) {
-                continue;
-            }
-
-            $lineTotal = $product->price * $qty;
-            $total += $lineTotal;
-
-            $items[] = [
-                'product' => $product,
-                'qty' => $qty,
-                'line_total' => $lineTotal,
-            ];
-        }
-
-        if (empty($items)) {
-            return redirect()->route('cart.index')
+        if ($result->items === []) {
+            return redirect()
+                ->route('cart.index')
                 ->with('error', 'Корзина пуста');
-        }
-
-        $order = Order::create([
-            'customer_name'   => $validated['customer_name'],
-            'customer_phone'  => $validated['customer_phone'],
-            'delivery_type'   => $validated['delivery_type'],
-            'payment_method'  => $validated['payment_method'],
-
-            'address'         => $validated['delivery_type'] === 'delivery'
-                ? ($validated['address'] ?? null)
-                : null,
-
-            'apartment'       => $validated['delivery_type'] === 'delivery' && !$isPrivateHouse
-                ? ($validated['apartment'] ?? null)
-                : null,
-
-            'entrance'        => $validated['delivery_type'] === 'delivery' && !$isPrivateHouse
-                ? ($validated['entrance'] ?? null)
-                : null,
-
-            'floor'           => $validated['delivery_type'] === 'delivery' && !$isPrivateHouse
-                ? ($validated['floor'] ?? null)
-                : null,
-
-            'intercom'        => $validated['delivery_type'] === 'delivery' && !$isPrivateHouse
-                ? ($validated['intercom'] ?? null)
-                : null,
-
-            'is_private_house'=> $validated['delivery_type'] === 'delivery'
-                ? $isPrivateHouse
-                : false,
-
-            'comment'         => $validated['comment'] ?? null,
-            'total_price'     => $total,
-            'status'          => 'new',
-        ]);
-
-        foreach ($items as $item) {
-            $product = $item['product'];
-
-            $order->items()->create([
-                'product_id'   => $product->id,
-                'product_name' => $product->name,
-                'price'        => $product->price,
-                'qty'          => $item['qty'],
-                'line_total'   => $item['line_total'],
-            ]);
         }
 
         session()->forget('cart');
 
-        return redirect()->route('home')
-            ->with('success', 'Спасибо! Заказ успешно оформлен. Мы скоро свяжемся с вами.');
+        return redirect()
+            ->route('home')
+            ->with('success', 'Спасибо! Заказ №' . $result->order->id . ' успешно оформлен. Мы скоро свяжемся с вами.');
     }
 }
