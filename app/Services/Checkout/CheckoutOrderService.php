@@ -2,6 +2,7 @@
 
 namespace App\Services\Checkout;
 
+use App\Events\OrderCreated;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -16,18 +17,18 @@ class CheckoutOrderService
         $total = 0.0;
 
         foreach ($cart as $id => $qty) {
-            $product = $products->get((int) $id);
+            $product = $products->get((int)$id);
 
             if (!$product) {
                 continue;
             }
 
-            $lineTotal = (float) $product->price * (int) $qty;
+            $lineTotal = (float)$product->price * (int)$qty;
             $total += $lineTotal;
 
             $items[] = [
                 'product' => $product,
-                'qty' => (int) $qty,
+                'qty' => (int)$qty,
                 'line_total' => $lineTotal,
             ];
         }
@@ -58,16 +59,18 @@ class CheckoutOrderService
                 $product = $item['product'];
 
                 $order->items()->create([
-                    'product_id'   => $product->id,
+                    'product_id' => $product->id,
                     'product_name' => $product->name,
-                    'price'        => $product->price,
-                    'qty'          => $item['qty'],
-                    'line_total'   => $item['line_total'],
+                    'price' => $product->price,
+                    'qty' => $item['qty'],
+                    'line_total' => $item['line_total'],
                 ]);
             }
 
             return $order;
         });
+
+        OrderCreated::dispatch($order);
 
         return new CheckoutOrderResult(
             order: $order,
@@ -75,6 +78,7 @@ class CheckoutOrderService
             total: $prepared->total,
         );
     }
+
 
     private function loadProducts(array $cart)
     {
