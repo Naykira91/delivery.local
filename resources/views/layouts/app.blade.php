@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Доставка еды')</title>
+    <title>@yield('title', 'Пару палок')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
@@ -13,7 +13,7 @@
 
         <a href="{{ route('home') }}" class="flex items-center gap-3 shrink-0">
             <div class="bg-white rounded-xl p-1 shadow-sm">
-                <img src="/images/logo.png" alt="Пару палок" class="h-8 w-auto">
+                <img src="{{ asset('images/logo.png') }}" alt="Пару палок" class="h-8 w-auto">
             </div>
 
             <div class="flex flex-col leading-tight">
@@ -35,15 +35,15 @@
         </form>
 
         <div class="hidden lg:flex flex-col text-sm text-right">
-            <a href="tel:+79000000000" class="font-semibold text-white">
-                +7 900 000-00-00
+            <a href="tel:+79991062956" class="font-semibold text-white hover:text-orange-400 transition">
+                +7 (999) 106-29-56
             </a>
-            <span class="text-neutral-400">Ежедневно 11:00–23:00</span>
+            <span class="text-neutral-400">Пн–Чт, Вс: 10:00–21:30 · Пт–Сб: 10:00–22:30</span>
         </div>
 
         @php($cartCount = array_sum(session('cart', [])))
 
-        <a href="{{ route('cart.index') }}" class="ml-3 text-sm text-white hover:text-orange-400 transition">
+        <a href="{{ route('cart.index') }}" class="ml-3 text-sm text-white hover:text-orange-400 transition whitespace-nowrap">
             🛒 Корзина
             <span
                 id="cartCount"
@@ -55,9 +55,26 @@
     </div>
 
     <div class="container mx-auto px-4 pb-3 flex gap-6 text-sm text-neutral-300">
-        <a href="{{ route('menu') }}" class="hover:text-orange-400 transition">Меню</a>
-        <a href="{{ route('delivery') }}" class="hover:text-orange-400 transition">Доставка и оплата</a>
-        <a href="{{ route('contacts') }}" class="hover:text-orange-400 transition">Контакты</a>
+        <a
+            href="{{ route('menu') }}"
+            class="{{ request()->routeIs('menu', 'home', 'product.show') ? 'text-white font-medium' : 'hover:text-orange-400' }} transition"
+        >
+            Меню
+        </a>
+
+        <a
+            href="{{ route('delivery') }}"
+            class="{{ request()->routeIs('delivery') ? 'text-white font-medium' : 'hover:text-orange-400' }} transition"
+        >
+            Доставка и оплата
+        </a>
+
+        <a
+            href="{{ route('contacts') }}"
+            class="{{ request()->routeIs('contacts') ? 'text-white font-medium' : 'hover:text-orange-400' }} transition"
+        >
+            Контакты
+        </a>
     </div>
 </header>
 
@@ -81,18 +98,45 @@
 </main>
 
 <footer class="border-t bg-white">
-    <div class="container mx-auto px-4 py-6 text-sm text-gray-600 flex flex-col gap-2">
+    <div class="container mx-auto px-4 py-6 text-sm text-gray-600 flex flex-col gap-3">
         <div class="flex flex-wrap gap-4">
-            <span>📞 <a class="text-black" href="tel:+79000000000">+7 900 000-00-00</a></span>
-            <span>📍 Оренбург</span>
-            <span>🕒 11:00–23:00</span>
+            <span>
+                📞
+                <a class="text-black hover:text-orange-600 transition" href="tel:+79991062956">
+                    +7 (999) 106-29-56
+                </a>
+            </span>
+
+            <span>☎ 222-345</span>
+
+            <span>📍 Пригородный, Нежинская улица, 1Б</span>
+
+            <span>🕒 Пн–Чт, Вс: 10:00–21:30 · Пт–Сб: 10:00–22:30</span>
         </div>
+
         <div class="flex flex-wrap gap-4">
-            <a class="hover:text-black" href="#">VK</a>
-            <a class="hover:text-black" href="https://t.me/parupalok56">Telegram</a>
-            <a class="hover:text-black" href="#">Instagram*</a>
+            <a
+                class="hover:text-black transition"
+                href="https://vk.com/parupalok56"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                VK
+            </a>
+
+            <a
+                class="hover:text-black transition"
+                href="https://t.me/parupalok56"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Telegram
+            </a>
         </div>
-        <div class="text-xs text-gray-400">*если используете</div>
+
+        <div class="text-xs text-gray-400">
+            © {{ date('Y') }} Пару палок — суши & роллы
+        </div>
     </div>
 </footer>
 </body>

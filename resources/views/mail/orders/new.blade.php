@@ -7,12 +7,21 @@
 <body style="margin:0; padding:0; background:#f4f4f5; font-family: Arial, Helvetica, sans-serif; color:#111827;">
 <div style="max-width:700px; margin:0 auto; padding:32px 16px;">
     <div style="background:#ffffff; border-radius:16px; padding:24px; box-shadow:0 4px 18px rgba(0,0,0,0.06);">
-        <div style="margin-bottom:24px;">
-            <div style="font-size:28px; font-weight:700; color:#f97316; margin-bottom:8px;">
-                Пару палок
-            </div>
-            <div style="font-size:22px; font-weight:700;">
+
+        <div style="text-align:center; margin-bottom:24px;">
+            <img
+                src="{{ $message->embed(public_path('images/logo1.png')) }}"
+                alt="Пару палок"
+                style="max-width:220px; width:100%; height:auto; display:inline-block;"
+            >
+        </div>
+
+        <div style="margin-bottom:24px; text-align:center;">
+            <div style="font-size:22px; font-weight:700; margin-bottom:8px;">
                 Новый заказ №{{ $order->id }}
+            </div>
+            <div style="font-size:14px; color:#6b7280;">
+                Уведомление с сайта «Пару палок»
             </div>
         </div>
 
@@ -91,7 +100,7 @@
             Итого: {{ number_format($order->total_price, 0, ',', ' ') }} ₽
         </div>
 
-        <div style="margin-top:24px; padding-top:16px; border-top:1px solid #e5e7eb; color:#6b7280; font-size:13px;">
+        <div style="margin-top:24px; padding-top:16px; border-top:1px solid #e5e7eb; color:#6b7280; font-size:13px; text-align:center;">
             Уведомление с сайта «Пару палок»
         </div>
     </div>
