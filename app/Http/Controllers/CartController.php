@@ -31,21 +31,30 @@ class CartController extends Controller
 
         $items = [];
         $total = 0;
+        $cleanCart = [];
 
         foreach ($cart as $id => $qty) {
-            $p = $products->get((int) $id);
-            if (!$p) {
+            $product = $products->get((int) $id);
+
+            if (!$product) {
                 continue;
             }
 
-            $line = $p->price * $qty;
-            $total += $line;
+            $qty = max(1, (int) $qty);
+            $lineTotal = $product->price * $qty;
+            $total += $lineTotal;
+
+            $cleanCart[$product->id] = $qty;
 
             $items[] = [
-                'product' => $p,
+                'product' => $product,
                 'qty' => $qty,
-                'line_total' => $line,
+                'line_total' => $lineTotal,
             ];
+        }
+
+        if ($cleanCart !== $cart) {
+            $this->saveCart($cleanCart);
         }
 
         return view('cart.index', compact('items', 'total'));
@@ -53,8 +62,9 @@ class CartController extends Controller
 
     public function add(Product $product, Request $request)
     {
-        $cart = $this->cart();
+        abort_unless($product->is_active, 404);
 
+        $cart = $this->cart();
         $cart[$product->id] = ($cart[$product->id] ?? 0) + 1;
 
         $this->saveCart($cart);
@@ -73,13 +83,10 @@ class CartController extends Controller
 
     public function inc(Product $product, Request $request)
     {
-        $cart = $this->cart();
+        abort_unless($product->is_active, 404);
 
-        if (isset($cart[$product->id])) {
-            $cart[$product->id]++;
-        } else {
-            $cart[$product->id] = 1;
-        }
+        $cart = $this->cart();
+        $cart[$product->id] = ($cart[$product->id] ?? 0) + 1;
 
         $this->saveCart($cart);
 

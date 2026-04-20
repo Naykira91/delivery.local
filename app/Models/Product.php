@@ -9,7 +9,7 @@ class Product extends Model
 {
     protected $fillable = [
         'type','name','slug','description','composition',
-        'weight_grams','pieces','price','is_active'
+        'weight_grams','pieces','price', 'old_price','is_active'
     ];
 
     /**

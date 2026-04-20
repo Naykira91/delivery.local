@@ -13,7 +13,12 @@
 
     <div class="grid lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2">
-            <form action="{{ route('checkout.store') }}" method="POST" class="bg-white border border-gray-100 rounded-2xl p-5 space-y-5">
+            <form
+                id="checkoutForm"
+                action="{{ route('checkout.store') }}"
+                method="POST"
+                class="bg-white border border-gray-100 rounded-2xl p-5 space-y-5"
+            >
                 @csrf
 
                 {{-- honeypot --}}
@@ -99,6 +104,9 @@
                                 class="{{ $inputClass }} @error('address') border-red-500 @enderror"
                                 placeholder="Например: ул. Ленина, 15"
                             >
+                            @error('address')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
@@ -154,6 +162,7 @@
 
                 {{-- Кнопка --}}
                 <button
+                    id="checkoutSubmitBtn"
                     type="submit"
                     class="w-full bg-orange-500 text-white rounded-xl px-4 py-3 font-medium hover:bg-orange-600 transition"
                 >
@@ -183,4 +192,4 @@
     </div>
 @endsection
 
-@vite(['resources/js/pages/checkout.js'])
+@vite('resources/js/pages/checkout.js')

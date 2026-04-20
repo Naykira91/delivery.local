@@ -1,4 +1,7 @@
 function initCheckoutPage() {
+    const form = document.getElementById('checkoutForm');
+    const submitBtn = document.getElementById('checkoutSubmitBtn');
+
     const phoneInput = document.querySelector('input[name="customer_phone"]');
     const deliveryRadios = document.querySelectorAll('.js-delivery-type');
     const addressFields = document.getElementById('addressFields');
@@ -7,9 +10,12 @@ function initCheckoutPage() {
     const flatFields = document.getElementById('flatFields');
     const addressInput = document.querySelector('input[name="address"]');
 
-    if (!phoneInput && !deliveryRadios.length) {
+    if (!form) {
         return;
     }
+
+    let isSubmitting = false;
+    const initialSubmitText = submitBtn ? submitBtn.textContent.trim() : 'Подтвердить заказ';
 
     if (phoneInput) {
         phoneInput.addEventListener('input', function () {
@@ -81,11 +87,46 @@ function initCheckoutPage() {
         }
     }
 
+    function lockSubmitButton() {
+        if (!submitBtn) {
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Оформляем...';
+        submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+    }
+
+    function unlockSubmitButton() {
+        if (!submitBtn) {
+            return;
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = initialSubmitText;
+        submitBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+    }
+
     deliveryRadios.forEach((radio) => {
         radio.addEventListener('change', toggleDeliveryType);
     });
 
     privateHouseCheckbox?.addEventListener('change', togglePrivateHouse);
+
+    form.addEventListener('submit', (e) => {
+        if (isSubmitting) {
+            e.preventDefault();
+            return;
+        }
+
+        isSubmitting = true;
+        lockSubmitButton();
+    });
+
+    window.addEventListener('pageshow', () => {
+        isSubmitting = false;
+        unlockSubmitButton();
+    });
 
     toggleDeliveryType();
     togglePrivateHouse();
